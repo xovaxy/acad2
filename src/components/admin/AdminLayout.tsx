@@ -27,6 +27,30 @@ const AdminLayout = () => {
     checkAuth();
   }, []);
 
+  // Listen for subscription status changes
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'subscription_updated') {
+        console.log('🔄 Subscription status updated, refreshing...');
+        checkAuth(); // Refresh the auth and subscription status
+        localStorage.removeItem('subscription_updated'); // Clean up
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also check for the flag on component mount
+    if (localStorage.getItem('subscription_updated')) {
+      console.log('🔄 Subscription update flag found, refreshing...');
+      checkAuth();
+      localStorage.removeItem('subscription_updated');
+    }
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   const checkAuth = async () => {
     const {
       data: { user },

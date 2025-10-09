@@ -49,9 +49,12 @@ const SubscriptionSuccess = () => {
         try {
           setActivatingSubscription(true);
           console.log(`🔄 Activating subscription for institution: ${instId}, order: ${orderId || 'N/A'}`);
-          await subscriptionService.activateSubscriptionAfterPayment(instId, orderId);
+          await subscriptionService.activateSubscriptionAfterPayment(orderId || instId);
           console.log('✅ Subscription activated successfully');
           setSubscriptionActivated(true);
+          
+          // Set flag to notify admin layout about subscription update
+          localStorage.setItem('subscription_updated', 'true');
         } catch (error) {
           console.error('❌ Error activating subscription:', error);
           // Continue showing success page even if activation fails
@@ -125,21 +128,10 @@ const SubscriptionSuccess = () => {
     }
   };
 
-  const handleLoginRedirect = () => {
-    navigate('/login', { state: { email: adminEmail } });
-  };
+  // Navigation handlers are now inline in the component
 
-  const handleDashboardRedirect = () => {
-    navigate('/admin');
-  };
-
-  if (!institutionName) {
-    // Redirect if no state data
-    useEffect(() => {
-      navigate('/');
-    }, [navigate]);
-    return null;
-  }
+  // Remove the problematic redirect logic that was causing 404s
+  // The page should show even without complete state data
 
   return (
     <PageTransition>
@@ -297,11 +289,24 @@ const SubscriptionSuccess = () => {
             {/* Action Buttons */}
             <div className="celebration-item flex flex-col sm:flex-row gap-4 justify-center">
               <AnimatedButton
-                onClick={() => navigate('/login')}
+                onClick={() => {
+                  // Set flag to refresh subscription status
+                  localStorage.setItem('subscription_updated', 'true');
+                  navigate('/admin');
+                }}
                 animationType="glow"
                 className="px-8"
               >
-                {accountCreated ? 'Login to Your Account' : 'Access Admin Panel'}
+                Go to Dashboard
+              </AnimatedButton>
+              
+              <AnimatedButton
+                onClick={() => navigate('/login')}
+                variant="outline"
+                animationType="pulse"
+                className="px-8"
+              >
+                {accountCreated ? 'Login to Your Account' : 'Login'}
               </AnimatedButton>
               
               <AnimatedButton
