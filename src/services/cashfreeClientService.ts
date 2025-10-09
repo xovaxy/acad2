@@ -51,7 +51,7 @@ class CashfreeClientService {
       console.log('🚀 Creating Cashfree order via backend:', orderData);
       
       // Call backend API instead of Cashfree directly
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend-7lxyxsjax-xovaxys-projects.vercel.app';
       const response = await fetch(`${backendUrl}/api/create-cashfree-order`, {
         method: 'POST',
         headers: {
@@ -68,9 +68,9 @@ class CashfreeClientService {
           error: errorData
         });
         
-        // If backend is not running, provide helpful error
+        // If backend is not accessible, provide helpful error
         if (response.status === 0 || !response.status) {
-          throw new Error('Backend server not running. Please start the backend server on port 3001.');
+          throw new Error('Backend server not accessible. Please check the backend deployment.');
         }
         
         throw new Error(`Backend API Error (${response.status}): ${errorData.error || errorData.message || response.statusText}`);
@@ -86,9 +86,9 @@ class CashfreeClientService {
     } catch (error) {
       console.error('❌ Error creating order via backend:', error);
       
-      // Check if it's a connection error (backend not running)
+      // Check if it's a connection error (backend not accessible)
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        throw new Error('Cannot connect to backend server. Please ensure the backend is running on http://localhost:3001');
+        throw new Error('Cannot connect to backend server. Please check the backend deployment status.');
       }
       
       throw error;
@@ -142,7 +142,7 @@ class CashfreeClientService {
     try {
       console.log('🔍 Verifying payment via backend for order:', orderId);
       
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend-7lxyxsjax-xovaxys-projects.vercel.app';
       const response = await fetch(`${backendUrl}/api/verify-payment/${orderId}`, {
         method: 'GET',
         headers: {
@@ -191,7 +191,7 @@ class CashfreeClientService {
     try {
       console.log('🏢 Creating institution account via backend:', accountData);
       
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend-7lxyxsjax-xovaxys-projects.vercel.app';
       const response = await fetch(`${backendUrl}/api/create-institution-account`, {
         method: 'POST',
         headers: {
