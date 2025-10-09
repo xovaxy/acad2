@@ -212,13 +212,32 @@ class SubscriptionService {
     try {
       console.log(`Updating subscription status for order ${orderId} to ${status}`);
       
+      // Since payment_order_id field doesn't exist, we need to get the current user's institution
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Get the user's profile and institution
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('institution_id')
+        .eq('user_id', user.id)
+        .single();
+
+      if (profileError || !profile?.institution_id) {
+        throw new Error(`Failed to get user's institution: ${profileError?.message || 'No institution found'}`);
+      }
+
+      // Update the institution's subscription status
       const { data, error } = await supabase
         .from('institutions')
         .update({ 
           subscription_status: status,
           updated_at: new Date().toISOString()
         })
-        .eq('id', orderId) // Note: Using institution ID instead of payment_order_id since that field doesn't exist
+        .eq('id', profile.institution_id)
         .select();
 
       if (error) {
@@ -226,12 +245,15 @@ class SubscriptionService {
       }
 
       if (!data || data.length === 0) {
-        throw new Error(`No institution found with order ID: ${orderId}`);
+        throw new Error(`No institution found with ID: ${profile.institution_id}`);
       }
 
-      console.log(`Successfully updated subscription status to ${status} for institution:`, data[0].name);
+      console.log(`✅ Successfully updated subscription status to ${status} for institution:`, data[0].name);
+      
+      // Set a flag to notify other components about the subscription update
+      localStorage.setItem('subscription_updated', 'true');
     } catch (error) {
-      console.error('Error updating subscription status by order ID:', error);
+      console.error('❌ Error updating subscription status by order ID:', error);
       throw error;
     }
   }
