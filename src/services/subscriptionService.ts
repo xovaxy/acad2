@@ -276,7 +276,7 @@ class SubscriptionService {
       
       // Try to activate via backend API first
       try {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend-7lxyxsjax-xovaxys-projects.vercel.app';
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com';
         const response = await fetch(`${backendUrl}/api/activate-subscription`, {
           method: 'POST',
           headers: {
