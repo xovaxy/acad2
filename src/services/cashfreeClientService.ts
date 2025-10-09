@@ -51,7 +51,7 @@ class CashfreeClientService {
       console.log('🚀 Creating Cashfree order via backend:', orderData);
       
       // Call backend API instead of Cashfree directly
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com/';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com';
       const response = await fetch(`${backendUrl}/api/create-cashfree-order`, {
         method: 'POST',
         headers: {
@@ -142,7 +142,7 @@ class CashfreeClientService {
     try {
       console.log('🔍 Verifying payment via backend for order:', orderId);
       
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com/';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com';
       const response = await fetch(`${backendUrl}/api/verify-payment/${orderId}`, {
         method: 'GET',
         headers: {
@@ -191,7 +191,7 @@ class CashfreeClientService {
     try {
       console.log('🏢 Creating institution account via backend:', accountData);
       
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com/';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://acadira-backend.onrender.com';
       const response = await fetch(`${backendUrl}/api/create-institution-account`, {
         method: 'POST',
         headers: {
