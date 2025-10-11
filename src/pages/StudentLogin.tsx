@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { AnimatedBackground } from "@/components/ui/animated-background";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, Loader2 } from "lucide-react";
+import { GraduationCap, Loader2, User, Lock, Mail, Eye, EyeOff } from "lucide-react";
 
 const StudentLogin = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,8 +12,18 @@ const StudentLogin = () => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();

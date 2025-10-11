@@ -1,7 +1,11 @@
 import Header from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import BenefitsSection from "@/components/BenefitsSection";
-import TrustSection from "@/components/TrustSection";
+import { HeroGeometric } from "@/components/ui/shape-landing-hero";
+import AcadiraZoomParallax from "@/components/AcadiraZoomParallax";
+import AboutAcadira from "@/components/AboutAcadira";
+import { AcadiraFeatures } from "@/components/AcadiraFeatures";
+import { AcadiraTrustedBy } from "@/components/AcadiraTrustedBy";
+import { AcadiraTestimonials } from "@/components/AcadiraTestimonials";
+import { AcadiraPricing } from "@/components/AcadiraPricing";
 import Footer from "@/components/Footer";
 import { AnimatedBackground, FloatingButton } from "@/components/ui/animated-background";
 
@@ -14,9 +18,17 @@ const Index = () => {
     <div className="min-h-screen relative">
       <AnimatedBackground particleCount={25} />
       <Header />
-      <HeroSection />
-      <BenefitsSection />
-      <TrustSection />
+      <HeroGeometric 
+        badge="Acadira"
+        title1="Elevate Your"
+        title2="Learning Experience"
+      />
+      <AcadiraZoomParallax />
+      <AboutAcadira />
+      <AcadiraFeatures />
+      <AcadiraTrustedBy />
+      <AcadiraTestimonials />
+      <AcadiraPricing />
       <Footer />
       <FloatingButton onClick={scrollToTop} icon="↑" />
     </div>
